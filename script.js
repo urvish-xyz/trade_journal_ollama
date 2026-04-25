@@ -532,8 +532,8 @@ startAutoLogoutTimer() {
     }
 
     renderGoalProgress(currentPnL) {
-        const monthlyGoal = parseInt(localStorage.getItem('monthlyGoal')) || 10000;
-        const weeklyGoal = parseInt(localStorage.getItem('weeklyGoal')) || 2500;
+        const monthlyGoal = this.settings.monthlyGoal || 10000;
+        const weeklyGoal = this.settings.weeklyGoal || 2500;
 
         const now = new Date();
         const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -1969,7 +1969,7 @@ startAutoLogoutTimer() {
         document.getElementById('notes-modal').classList.remove('active');
     }
 
-    addDemoData() {
+    async addDemoData() {
         if (this.trades.length > 0) {
             if (!confirm('You already have data. Add demo data anyway?')) return;
         }
@@ -1990,8 +1990,8 @@ startAutoLogoutTimer() {
             const exitDate = new Date(entryDate);
             exitDate.setHours(exitDate.getHours() + Math.floor(Math.random() * 48));
 
-            this.trades.push({
-                id: Date.now() + i,
+            const trade = {
+                id: `trade_${Date.now()}_${i}`,
                 symbol: symbol,
                 quantity: quantity,
                 direction: direction,
@@ -2011,7 +2011,10 @@ startAutoLogoutTimer() {
                     lessons: ''
                 },
                 date: entryDate.toISOString()
-            });
+            };
+
+            this.trades.push(trade);
+            await FirebaseDB.saveTrade(this.currentUserId, trade);
         }
 
         this.notes.push({
@@ -2021,7 +2024,6 @@ startAutoLogoutTimer() {
             date: new Date().toISOString()
         });
 
-        this.saveData();
         this.renderAllSections();
         this.showNotification('Demo data added! Added 10 trades and 1 note.', 'success');
     }
@@ -2094,13 +2096,26 @@ startAutoLogoutTimer() {
         this.renderTagsList();
     }
 
-    clearAllData() {
+    async clearAllData() {
         if (confirm('Are you SURE you want to delete ALL data? This cannot be undone!')) {
+            // Delete all trades from Firebase
+            const tradesResult = await FirebaseDB.getTrades(this.currentUserId);
+            if (tradesResult.success) {
+                for (const trade of tradesResult.trades) {
+                    await FirebaseDB.deleteTrade(this.currentUserId, trade.id);
+                }
+            }
+            
+            // Reset to defaults
             this.trades = [];
             this.notes = [];
             this.strategies = ['Breakout', 'Swing', 'Scalp', 'News Trade', 'Reversal'];
             this.tags = ['High Confidence', 'Quick Trade', 'Long Hold', 'Risky', 'Safe'];
-            this.saveData();
+            
+            // Sync strategies and tags
+            await this.syncStrategiesToFirebase();
+            await this.syncTagsToFirebase();
+            
             this.renderAllSections();
             this.showNotification('All data cleared successfully!', 'success');
         }
