@@ -13,6 +13,7 @@ class TradingJournal {
         this.sortConfig = { key: null, direction: 'asc' };
         this.filters = {};
         this.resizeTimeout = null;
+        this.autoLogoutTimeout = null;
 
         this.emotionalStates = ['Calm', 'Frustrated', 'Overconfident', 'Anxious', 'Impatient', 'Focused', 'Stressed'];
         this.mistakes = ['overtrading', 'risked-too-much', 'exited-too-late', 'ignored-signals', 'ignored-stoploss', 'revenge-trading', 'exited-too-early', 'fomo-entry', 'no-clear-plan', 'no-mistake'];
@@ -25,10 +26,22 @@ class TradingJournal {
 
     checkExistingSession() {
         const savedUserId = sessionStorage.getItem('tradingJournalUserId');
-        if (savedUserId) {
-            this.currentUserId = savedUserId;
-            this.loadUserData();
-            this.showAppUI();
+        const loginTime = sessionStorage.getItem('loginTime');
+        
+        if (savedUserId && loginTime) {
+            const elapsed = Date.now() - parseInt(loginTime);
+            const twentyFourHours = 24 * 60 * 60 * 1000;
+            
+            if (elapsed > twentyFourHours) {
+                // Auto logout - session expired
+                this.logout();
+            } else {
+                this.currentUserId = savedUserId;
+                this.loadUserData();
+                // Set timer for remaining time
+                const remaining = twentyFourHours - elapsed;
+                this.autoLogoutTimeout = setTimeout(() => this.logout(), remaining);
+            }
         } else {
             this.showLoginModal();
         }
@@ -77,8 +90,10 @@ class TradingJournal {
             if (result.success) {
                 this.currentUserId = userId;
                 sessionStorage.setItem('tradingJournalUserId', userId);
+                sessionStorage.setItem('loginTime', Date.now().toString());
                 this.hideLoginModal();
                 this.loadUserData();
+                this.startAutoLogoutTimer();
             } else {
                 errorDiv.textContent = result.error;
                 loginBtn.disabled = false;
@@ -232,6 +247,7 @@ class TradingJournal {
         });
 
         document.getElementById('theme-toggle').addEventListener('click', () => this.toggleTheme());
+        document.getElementById('logout-btn').addEventListener('click', () => this.logout());
 
         document.getElementById('mobile-menu-toggle').addEventListener('click', () => this.toggleMobileNav());
         document.getElementById('mobile-nav-close').addEventListener('click', () => this.closeMobileNav());
@@ -349,6 +365,46 @@ class TradingJournal {
         setTimeout(() => {
             this.updateAllCharts();
         }, 100);
+    }
+
+    logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            sessionStorage.removeItem('tradingJournalUserId');
+            sessionStorage.removeItem('loginTime');
+            this.currentUserId = null;
+            this.trades = [];
+            document.getElementById('app-container').style.display = 'none';
+            document.getElementById('login-modal').style.display = 'flex';
+            document.getElementById('user-id').value = '';
+            document.getElementById('secret-key').value = '';
+        }
+    }
+
+checkAutoLogout() {
+        const loginTime = sessionStorage.getItem('loginTime');
+        if (loginTime) {
+            const elapsed = Date.now() - parseInt(loginTime);
+            const twentyFourHours = 24 * 60 * 60 * 1000;
+            if (elapsed > twentyFourHours) {
+                this.logout();
+            } else {
+                // Set timer for remaining time
+                const remaining = twentyFourHours - elapsed;
+                setTimeout(() => this.logout(), remaining);
+            }
+        }
+    }
+
+    startAutoLogoutTimer() {
+        // Clear any existing timer
+        if (this.autoLogoutTimeout) {
+            clearTimeout(this.autoLogoutTimeout);
+        }
+        // Set 24 hour timer
+        const twentyFourHours = 24 * 60 * 60 * 1000;
+        this.autoLogoutTimeout = setTimeout(() => this.logout(), twentyFourHours);
+    }
+        }
     }
 
     toggleMobileNav() {

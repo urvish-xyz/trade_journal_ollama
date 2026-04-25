@@ -315,6 +315,25 @@ body {
     color: var(--text-primary);
 }
 
+.logout-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: none;
+    border: 1px solid var(--danger);
+    border-radius: var(--radius-md);
+    color: var(--danger);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.logout-btn:hover {
+    background-color: var(--danger);
+    color: white;
+}
+
 /* Main Content */
 .main {
     max-width: 1400px;
@@ -2321,6 +2340,14 @@ tr.loss {
     
     .mobile-trade-actions .btn {
         width: 100%;
+    }
+
+    .logout-btn span {
+        display: none;
+    }
+
+    .logout-btn {
+        padding: var(--spacing-sm);
     }
 }
 
