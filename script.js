@@ -1250,7 +1250,7 @@ class TradingJournal {
         });
     }
 
-    addTrade() {
+    async addTrade() {
         const form = document.getElementById('trade-form');
 
         const entryPriceEl = document.getElementById('entry-price');
@@ -1542,7 +1542,7 @@ class TradingJournal {
         this.openEditModal(trade);
     }
 
-    deleteTrade(id) {
+    async deleteTrade(id) {
         if (confirm('Are you sure you want to delete this trade?')) {
             await this.deleteTradeFromFirebase(id);
             this.renderTradesTable();
@@ -1679,7 +1679,7 @@ class TradingJournal {
         modal.classList.add('active');
     }
 
-    updateTrade(id) {
+    async updateTrade(id) {
         const trade = this.trades.find(t => t.id === id);
         if (!trade) return;
 
@@ -2006,7 +2006,7 @@ class TradingJournal {
         });
     }
 
-    addStrategy() {
+    async addStrategy() {
         const input = document.getElementById('new-strategy');
         const strategy = input.value.trim();
         if (strategy && !this.strategies.includes(strategy)) {
@@ -2017,13 +2017,13 @@ class TradingJournal {
         }
     }
 
-    removeStrategy(index) {
+    async removeStrategy(index) {
         this.strategies.splice(index, 1);
         await this.syncStrategiesToFirebase();
         this.renderStrategiesList();
     }
 
-    addTag() {
+    async addTag() {
         const input = document.getElementById('new-tag');
         const tag = input.value.trim();
         if (tag && !this.tags.includes(tag)) {
@@ -2034,7 +2034,7 @@ class TradingJournal {
         }
     }
 
-    removeTag(index) {
+    async removeTag(index) {
         this.tags.splice(index, 1);
         await this.syncTagsToFirebase();
         this.renderTagsList();

@@ -17,15 +17,6 @@ if (!firebase.apps.length) {
 // Initialize Firestore
 const db = firebase.firestore();
 
-// Cache settings for offline support (only if not already set)
-try {
-    db.settings({
-        cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
-    });
-} catch (e) {
-    // Settings already configured, ignore
-}
-
 // Helper functions
 const FirebaseDB = {
   // Login/Register user
