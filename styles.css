@@ -1627,19 +1627,30 @@ body {
     display: table;
 }
 
+.table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -var(--spacing-md);
+    padding: 0 var(--spacing-md);
+}
+
 .mobile-table-view {
     display: none;
 }
 
 @media (max-width: 768px) {
+    .trades-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: var(--spacing-sm);
+    }
+    
     .trades-table {
-        display: none;
+        min-width: 800px;
     }
     
     .mobile-table-view {
         display: block;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
     }
     
     .mobile-trade-card {
@@ -2270,6 +2281,16 @@ tr.loss {
         font-size: 1rem;
     }
     
+    /* Mobile horizontal scroll fix */
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .trades-table {
+        min-width: 700px;
+    }
+    
     /* Hide desktop table on mobile */
 .trades-table {
     display: table;
@@ -2348,6 +2369,12 @@ tr.loss {
 
     .logout-btn {
         padding: var(--spacing-sm);
+    }
+    
+    /* Ensure scroll works */
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 }
 
