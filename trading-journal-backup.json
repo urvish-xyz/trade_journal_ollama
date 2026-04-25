@@ -1,0 +1,52 @@
+{
+  "trades": [
+    {
+      "id": 1755839758298,
+      "symbol": "MFSL 1500 CE",
+      "quantity": 100,
+      "direction": "buy",
+      "entryPrice": 100,
+      "exitPrice": 300,
+      "stopLoss": 80,
+      "takeProfit": 30000,
+      "strategy": "Breakout",
+      "entryTime": "2025-08-22T10:44",
+      "exitTime": "2025-08-22T10:48",
+      "tags": [
+        "High Confidence"
+      ],
+      "psychology": {
+        "entryConfidence": 9,
+        "satisfaction": 9,
+        "emotionalState": "",
+        "mistakes": [
+          "no-mistake"
+        ],
+        "lessons": ""
+      },
+      "date": "2025-08-22T05:15:58.298Z",
+      "pnl": 20000,
+      "rrRatio": 10
+    }
+  ],
+  "strategies": [
+    "Breakout",
+    "Swing",
+    "Scalp",
+    "News Trade",
+    "Reversal"
+  ],
+  "tags": [
+    "High Confidence",
+    "Quick Trade",
+    "Long Hold",
+    "Risky",
+    "Safe"
+  ],
+  "notes": "Berlin's numerical strategy is working perfectly and I'm 60% profitable from that.",
+  "settings": {
+    "defaultRisk": 2,
+    "theme": "auto"
+  },
+  "exportDate": "2025-08-22T05:16:16.759Z"
+}
