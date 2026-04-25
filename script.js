@@ -35,11 +35,11 @@ class TradingJournal {
     }
 
     showLoginModal() {
-        document.getElementById('login-modal').classList.add('active');
+        document.getElementById('login-modal').style.display = 'flex';
     }
 
     hideLoginModal() {
-        document.getElementById('login-modal').classList.remove('active');
+        document.getElementById('login-modal').style.display = 'none';
     }
 
     async setupLoginEventListeners() {
