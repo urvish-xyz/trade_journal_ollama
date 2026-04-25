@@ -287,7 +287,7 @@ class TradingJournal {
 
         document.getElementById('add-strategy').addEventListener('click', () => this.addStrategy());
         document.getElementById('add-tag').addEventListener('click', () => this.addTag());
-        document.getElementById('default-risk').addEventListener('change', (e) => {
+        document.getElementById('default-risk').addEventListener('change', async (e) => {
             this.settings.defaultRisk = parseFloat(e.target.value);
             await this.syncSettingsToFirebase();
         });
