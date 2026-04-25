@@ -380,7 +380,7 @@ class TradingJournal {
         }
     }
 
-checkAutoLogout() {
+    checkAutoLogout() {
         const loginTime = sessionStorage.getItem('loginTime');
         if (loginTime) {
             const elapsed = Date.now() - parseInt(loginTime);
@@ -395,7 +395,7 @@ checkAutoLogout() {
         }
     }
 
-    startAutoLogoutTimer() {
+startAutoLogoutTimer() {
         // Clear any existing timer
         if (this.autoLogoutTimeout) {
             clearTimeout(this.autoLogoutTimeout);
@@ -403,8 +403,6 @@ checkAutoLogout() {
         // Set 24 hour timer
         const twentyFourHours = 24 * 60 * 60 * 1000;
         this.autoLogoutTimeout = setTimeout(() => this.logout(), twentyFourHours);
-    }
-        }
     }
 
     toggleMobileNav() {
