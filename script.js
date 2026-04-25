@@ -55,6 +55,10 @@ class TradingJournal {
             const userId = userIdInput.value.trim().toLowerCase();
             const secretKey = secretKeyInput.value.trim();
 
+            if (!userId || !secretKey) {
+                errorDiv.textContent = 'Please enter both User ID and Secret Key';
+                return;
+            }
             if (userId.length < 3) {
                 errorDiv.textContent = 'User ID must be at least 3 characters';
                 return;
@@ -77,10 +81,9 @@ class TradingJournal {
                 this.loadUserData();
             } else {
                 errorDiv.textContent = result.error;
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Access Account';
             }
-
-            loginBtn.disabled = false;
-            loginBtn.textContent = 'Access Account';
         });
 
         createAccountBtn.addEventListener('click', async () => {
@@ -98,11 +101,16 @@ class TradingJournal {
 
             createAccountBtn.disabled = true;
             createAccountBtn.textContent = 'Creating...';
+            errorDiv.textContent = '';
 
             const result = await FirebaseDB.createAccount(userId, secretKey);
 
             if (result.success) {
-                alert('Account created! Please login with your credentials.');
+                alert('Account created! Now login with your credentials.');
+                userIdInput.value = '';
+                secretKeyInput.value = '';
+                loginBtn.textContent = 'Access Account';
+                loginBtn.disabled = false;
                 createAccountBtn.disabled = false;
                 createAccountBtn.textContent = 'Create one';
             } else {

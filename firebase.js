@@ -27,19 +27,24 @@ const FirebaseDB = {
   // Login/Register user
   async login(userId, secretKey) {
     try {
+      console.log('Attempting login for:', userId);
       const userDoc = await db.collection('users').doc(userId).get();
       
       if (userDoc.exists) {
         const data = userDoc.data();
         if (data.secretKey === secretKey) {
+          console.log('Login successful!');
           return { success: true, userId, isNew: false };
         } else {
+          console.log('Invalid secret key');
           return { success: false, error: 'Invalid secret key' };
         }
       } else {
+        console.log('Account not found');
         return { success: false, error: 'Account not found' };
       }
     } catch (err) {
+      console.error('Login error:', err);
       return { success: false, error: err.message };
     }
   },
@@ -47,19 +52,25 @@ const FirebaseDB = {
   // Create new account
   async createAccount(userId, secretKey) {
     try {
+      console.log('Creating account for:', userId);
+      
       const userDoc = await db.collection('users').doc(userId).get();
       
       if (userDoc.exists) {
+        console.log('Username already exists');
         return { success: false, error: 'Username already taken' };
       }
       
+      console.log('Setting user document...');
       await db.collection('users').doc(userId).set({
         secretKey: secretKey,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
       
+      console.log('Account created successfully!');
       return { success: true, userId, isNew: true };
     } catch (err) {
+      console.error('Create account error:', err);
       return { success: false, error: err.message };
     }
   },
