@@ -1521,14 +1521,14 @@ startAutoLogoutTimer() {
 
             tbody.querySelectorAll('.edit-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    const tradeId = parseInt(e.currentTarget.dataset.tradeId);
+                    const tradeId = e.currentTarget.dataset.tradeId;
                     this.editTrade(tradeId);
                 });
             });
 
             tbody.querySelectorAll('.delete-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    const tradeId = parseInt(e.currentTarget.dataset.tradeId);
+                    const tradeId = e.currentTarget.dataset.tradeId;
                     this.deleteTrade(tradeId);
                 });
             });
@@ -1538,13 +1538,13 @@ startAutoLogoutTimer() {
             mobileContainer.innerHTML = mobileHTML;
             mobileContainer.querySelectorAll('.edit-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    const tradeId = parseInt(e.currentTarget.dataset.tradeId);
+                    const tradeId = e.currentTarget.dataset.tradeId;
                     this.editTrade(tradeId);
                 });
             });
             mobileContainer.querySelectorAll('.delete-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    const tradeId = parseInt(e.currentTarget.dataset.tradeId);
+                    const tradeId = e.currentTarget.dataset.tradeId;
                     this.deleteTrade(tradeId);
                 });
             });
